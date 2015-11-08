@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.arborsoft</groupId>
@@ -13,19 +11,22 @@
     <description>Catalog</description>
 
     <properties>
-        <java-version>1.7</java-version>
+        <java.version>1.7</java.version>
         <spring.version>4.2.2.RELEASE</spring.version>
+        <spring.data.version>4.0.0.RELEASE</spring.data.version>
         <neo4j.version>2.3.0</neo4j.version>
+        <neo4j.ogm.version>1.1.0</neo4j.ogm.version>
         <lombok.version>1.16.6</lombok.version>
 
+        <appengine.version>1.9.28</appengine.version>
+        <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
         <guava.version>18.0</guava.version>
         <jackson.version>2.6.3</jackson.version>
         <jersey.version>1.19</jersey.version>
         <junit.version>4.12</junit.version>
+        <jstl.version>1.2</jstl.version>
         <slf4j.version>1.7.12</slf4j.version>
 
-        <appengine.version>1.9.28</appengine.version>
-        <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
     </properties>
@@ -53,7 +54,7 @@
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>${jstl.version}</version>
         </dependency>
 
         <!-- google app engine test -->
@@ -102,6 +103,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -112,7 +119,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
-            <version>4.0.0.RELEASE</version>
+            <version>${spring.data.version}</version>
         </dependency>
 
         <!-- neo4j -->
@@ -129,15 +136,30 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm</artifactId>
-            <version>1.1.0</version>
+            <version>${neo4j.ogm.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.neo4j.app</groupId>
             <artifactId>neo4j-server</artifactId>
             <version>${neo4j.version}</version>
-            <type>test-jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-access</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
@@ -150,6 +172,16 @@
             <artifactId>neo4j-harness</artifactId>
             <version>${neo4j.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-access</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- lombok -->
@@ -200,8 +232,8 @@
                 <version>3.1</version>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -229,13 +261,12 @@
                     <enableJarClasses>false</enableJarClasses>
                     <version>${project.version}</version>
                     <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
-                    <!-- address>0.0.0.0</address>
-                    <port>8080</port -->
-                    <!-- Comment in the below snippet to enable local debugging with a remote debugger
-                         like those included with Eclipse or IntelliJ -->
-                    <!-- jvmFlags>
-                      <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>
-                    </jvmFlags -->
+                    <!--<address>0.0.0.0</address>-->
+                    <!--<port>8080</port>-->
+                    <!-- Comment in the below snippet to enable local debugging with a remote debugger like those included with Eclipse or IntelliJ -->
+                    <!--<jvmFlags>-->
+                      <!--<jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>-->
+                    <!--</jvmFlags>-->
                 </configuration>
             </plugin>
             <plugin>
