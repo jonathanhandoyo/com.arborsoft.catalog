@@ -9,8 +9,11 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.template.Neo4jTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.HashSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfiguration.class})
@@ -22,13 +25,7 @@ public class MainTest {
 
     @Test
     public void test1() throws Exception {
-        Actor actor = this.actorRepository.findByName("name").iterator().next();
-        Assert.assertNotNull(actor);
-//        System.out.println(actor.toString());
-//        System.out.println(actor.toString());
-//        System.out.println(actor.toString());
-//        System.out.println(actor.toString());
-//        System.out.println(actor.toString());
-//        System.out.println(actor.toString());
+        this.actorRepository.friend(this.actorRepository.findByName("name1"), this.actorRepository.findByName("name2"));
+        this.actorRepository.unfriend(this.actorRepository.findByName("name2"), this.actorRepository.findByName("name1"));
     }
 }
