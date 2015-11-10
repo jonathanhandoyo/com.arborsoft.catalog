@@ -1,8 +1,9 @@
 package com.arborsoft.catalog.test;
 
 import com.arborsoft.catalog.config.ApplicationConfiguration;
-import com.arborsoft.catalog.model.Actor;
-import com.arborsoft.catalog.repository.ActorRepository;
+import com.arborsoft.catalog.model.User;
+import com.arborsoft.catalog.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,32 +18,29 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class MainTest {
     private static final Logger LOG = LoggerFactory.getLogger(MainTest.class);
 
-    @Autowired
-    private ActorRepository actorRepository;
+    @Autowired private Neo4jOperations neo4jTemplate;
+    @Autowired private UserRepository users;
 
-    @Autowired
-    private Neo4jOperations template;
+    @Before
+    public void before() throws Exception {
+        LOG.info("");
+    }
 
     @Test
     public void test1() throws Exception {
-//        for (int i = 0; i < 100; i++) {
-            this.actorRepository.friend(this.actorRepository.findByName("name1"), this.actorRepository.findByName("name2"));
-//            this.actorRepository.unfriend(this.actorRepository.findByName("name2"), this.actorRepository.findByName("name1"));
-//        }
+        try {
+            this.users.deleteAll();
 
-        Actor test = this.template.load(Actor.class, 1L, 1);
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
-        LOG.info(test.toString());
+            User input = new User();
+            input.setCode("user-code");
+            input.setName("name");
+            this.neo4jTemplate.save(input);
+
+            User output = this.users.findByCode("user-code");
+            LOG.info(output.toString());
+        } catch (Exception exception) {
+            LOG.error(exception.getMessage(), exception);
+            throw exception;
+        }
     }
 }
